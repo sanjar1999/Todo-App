@@ -23,7 +23,7 @@ public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
 
     public async Task<TodosVm> Handle(GetTodosQuery request, CancellationToken cancellationToken)
     {
-        var a =  new TodosVm
+        return new TodosVm
         {
             PriorityLevels = Enum.GetValues(typeof(PriorityLevel))
                 .Cast<PriorityLevel>()
@@ -38,6 +38,5 @@ public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
 
             Colours = Colour.GetKVPofColours().Select(p => new ColourDto { Name = p.Key, Value = p.Value }).ToList()  
         };
-        return a;
     }
 }
