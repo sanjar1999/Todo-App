@@ -15,6 +15,7 @@ public class TodoItemDto : IMapFrom<TodoItem>
     public bool Done { get; set; }
 
     public int Priority { get; set; }
+    public string? ColourCode { get; set; }
 
     public string? Note { get; set; }
 
@@ -22,5 +23,6 @@ public class TodoItemDto : IMapFrom<TodoItem>
     {
         profile.CreateMap<TodoItem, TodoItemDto>()
             .ForMember(d => d.Priority, opt => opt.MapFrom(s => (int)s.Priority));
+
     }
 }

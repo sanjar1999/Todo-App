@@ -27,6 +27,34 @@ public class Colour : ValueObject
         return colour;
     }
 
+    public static Dictionary<string, string> GetKVPofColours()
+    {
+        Dictionary<string, string> keyValuePairs = new();
+
+        for (int i = 0; i < ColourNames.Count(); i++)
+        {
+            keyValuePairs.Add(ColourNames.ElementAt(i), SupportedColours.ElementAt(i).Code);
+        }
+
+        return keyValuePairs;
+    }
+
+
+    public static IEnumerable<string> ColourNames
+    {
+        get
+        {
+            yield return nameof(White);
+            yield return nameof(Red);
+            yield return nameof(Orange);
+            yield return nameof(Yellow);
+            yield return nameof(Green);
+            yield return nameof(Blue);
+            yield return nameof(Purple);
+            yield return nameof(Grey);
+        }
+    }
+
     public static Colour White => new("#FFFFFF");
 
     public static Colour Red => new("#FF5733");

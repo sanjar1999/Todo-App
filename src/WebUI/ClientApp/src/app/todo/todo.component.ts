@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {
   TodoListsClient, TodoItemsClient,
-  TodoListDto, TodoItemDto, PriorityLevelDto,
+  TodoListDto, TodoItemDto, PriorityLevelDto,ColourDto,
   CreateTodoListCommand, UpdateTodoListCommand,
   CreateTodoItemCommand, UpdateTodoItemDetailCommand
 } from '../web-api-client';
@@ -20,6 +20,7 @@ export class TodoComponent implements OnInit {
   deleteCountDownInterval: any;
   lists: TodoListDto[];
   priorityLevels: PriorityLevelDto[];
+  colours: ColourDto[];
   selectedList: TodoListDto;
   selectedItem: TodoItemDto;
   newListEditor: any = {};
@@ -32,6 +33,7 @@ export class TodoComponent implements OnInit {
     id: [null],
     listId: [null],
     priority: [''],
+    colourCode: [''],
     note: ['']
   });
 
@@ -47,7 +49,10 @@ export class TodoComponent implements OnInit {
     this.listsClient.get().subscribe(
       result => {
         this.lists = result.lists;
+
         this.priorityLevels = result.priorityLevels;
+        this.colours = result.colours;
+
         if (this.lists.length) {
           this.selectedList = this.lists[0];
         }
@@ -162,6 +167,7 @@ export class TodoComponent implements OnInit {
         }
 
         this.selectedItem.priority = item.priority;
+        this.selectedItem.colourCode = item.colourCode;
         this.selectedItem.note = item.note;
         this.itemDetailsModalRef.hide();
         this.itemDetailsFormGroup.reset();
@@ -175,6 +181,7 @@ export class TodoComponent implements OnInit {
       id: 0,
       listId: this.selectedList.id,
       priority: this.priorityLevels[0].value,
+      colourCode: this.colours[0].value,
       title: '',
       done: false
     } as TodoItemDto;
