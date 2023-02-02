@@ -7,4 +7,6 @@ public class TodosVm
     public IList<TodoListDto> Lists { get; set; } = new List<TodoListDto>();
 
     public IList<ColourDto> Colours { get; set; } = new List<ColourDto>();
+
+    public IList<TagsDto> Tags { get; set; } = new List<TagsDto>();
 }

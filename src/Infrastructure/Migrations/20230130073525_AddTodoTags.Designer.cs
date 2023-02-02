@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo_App.Infrastructure.Persistence;
 
@@ -11,9 +12,10 @@ using Todo_App.Infrastructure.Persistence;
 namespace Todo_App.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130073525_AddTodoTags")]
+    partial class AddTodoTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -344,9 +346,14 @@ namespace Todo_App.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int?>("TodoItemTagId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ListId");
+
+                    b.HasIndex("TodoItemTagId");
 
                     b.ToTable("TodoItems");
                 });
@@ -474,21 +481,6 @@ namespace Todo_App.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("TodoItemTodoItemTag", b =>
-                {
-                    b.Property<int>("TodoItemTagId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TodoItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TodoItemTagId", "TodoItemsId");
-
-                    b.HasIndex("TodoItemsId");
-
-                    b.ToTable("TodoItemTodoItemTag");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -548,7 +540,13 @@ namespace Todo_App.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Todo_App.Domain.Entities.TodoItemTag", "TodoItemTag")
+                        .WithMany()
+                        .HasForeignKey("TodoItemTagId");
+
                     b.Navigation("List");
+
+                    b.Navigation("TodoItemTag");
                 });
 
             modelBuilder.Entity("Todo_App.Domain.Entities.TodoList", b =>
@@ -571,21 +569,6 @@ namespace Todo_App.Infrastructure.Migrations
                         });
 
                     b.Navigation("Colour")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TodoItemTodoItemTag", b =>
-                {
-                    b.HasOne("Todo_App.Domain.Entities.TodoItemTag", null)
-                        .WithMany()
-                        .HasForeignKey("TodoItemTagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Todo_App.Domain.Entities.TodoItem", null)
-                        .WithMany()
-                        .HasForeignKey("TodoItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

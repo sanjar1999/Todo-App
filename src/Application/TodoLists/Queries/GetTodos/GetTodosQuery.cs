@@ -23,7 +23,7 @@ public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
 
     public async Task<TodosVm> Handle(GetTodosQuery request, CancellationToken cancellationToken)
     {
-        return new TodosVm
+        var a = new TodosVm
         {
             PriorityLevels = Enum.GetValues(typeof(PriorityLevel))
                 .Cast<PriorityLevel>()
@@ -36,7 +36,14 @@ public class GetTodosQueryHandler : IRequestHandler<GetTodosQuery, TodosVm>
                 .OrderBy(t => t.Title)
                 .ToListAsync(cancellationToken),
 
-            Colours = Colour.GetKVPofColours().Select(p => new ColourDto { Name = p.Key, Value = p.Value }).ToList()  
+            Colours = Colour.GetKVPofColours().Select(p => new ColourDto { Name = p.Key, Value = p.Value }).ToList(),
+
+            Tags = await _context.TodoItemsTags
+                .AsNoTracking()
+                .ProjectTo<TagsDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken),
         };
+
+        return a;
     }
 }

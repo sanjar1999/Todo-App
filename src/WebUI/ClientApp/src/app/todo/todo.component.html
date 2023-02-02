@@ -47,60 +47,138 @@
           <i class="bi bi-three-dots-vertical"></i>
         </button>
       </div>
-      <ul id="todo-items" class="list-group mb-2">
-        <li
-          class="list-group-item"
-          *ngFor="let item of selectedList.items; index as i"
-          [ngStyle]="{ 'background-color': item.colourCode }"
-        >
-          <div class="d-flex">
-            <div class="todo-item-checkbox">
-              <input
-                type="checkbox"
-                [(ngModel)]="item.done"
-                (change)="updateItem(item)"
-              />
-            </div>
-            <div class="flex-fill">
-              <input
-                id="{{ 'itemTitle' + i }}"
-                *ngIf="item == selectedItem"
-                type="text"
-                class="form-control item-input-control"
-                [(ngModel)]="item.title"
-                (keyup.enter)="updateItem(item, true)"
-                (blur)="updateItem(item)"
-                autofocus="autofocus"
-              />
-              <div
-                class="todo-item-title"
-                *ngIf="item != selectedItem"
-                [ngClass]="{ 'done-todo': item.done }"
-                (click)="editItem(item, 'itemTitle' + i)"
-                class="form-control item-input-control"
-              >
-                <span>{{ item.title }}</span>
+      <!-- displayed Todo items -->
+      <div *ngIf="selectedValue.value === undefined">
+        <ul id="todo-items" class="list-group mb-2">
+          <li
+            class="list-group-item"
+            *ngFor="let item of selectedList.items; index as i"
+            [ngStyle]="{ 'background-color': item.colourCode }"
+          >
+            <div class="d-flex">
+              <div class="todo-item-checkbox">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="item.done"
+                  (change)="updateItem(item)"
+                />
+              </div>
+              <div class="flex-fill">
+                <input
+                  id="{{ 'itemTitle' + i }}"
+                  *ngIf="item == selectedItem"
+                  type="text"
+                  class="form-control item-input-control"
+                  [(ngModel)]="item.title"
+                  (keyup.enter)="updateItem(item, true)"
+                  (blur)="updateItem(item)"
+                  autofocus="autofocus"
+                />
+                <div
+                  class="todo-item-title"
+                  *ngIf="item != selectedItem"
+                  [ngClass]="{ 'done-todo': item.done }"
+                  (click)="editItem(item, 'itemTitle' + i)"
+                  class="form-control item-input-control"
+                >
+                  <span>{{ item.title }}</span>
+                </div>
+              </div>
+              <div class="todo-item-commands">
+                <button
+                  *ngIf="item.id != 0"
+                  (click)="showItemDetailsModal(itemDetailsModalTemplate, item)"
+                  class="btn btn-default btn-xs"
+                  role="button"
+                >
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
               </div>
             </div>
-            <div class="todo-item-commands">
-              <button
-                *ngIf="item.id != 0"
-                (click)="showItemDetailsModal(itemDetailsModalTemplate, item)"
-                class="btn btn-default btn-xs"
-                role="button"
-              >
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
+          </li>
+          <li class="list-group-item" (click)="addItem()">
+            <button class="btn btn-default">Add Item...</button>
+          </li>
+        </ul>
+      </div>
+      <!-- displayed filtered todo items -->
+      <div *ngIf="selectedValue.value != undefined">
+        <ul id="todo-items" class="list-group mb-2">
+          <li
+            class="list-group-item"
+            *ngFor="let item of filteredTodo; index as i"
+            [ngStyle]="{ 'background-color': item.colourCode }"
+          >
+            <div class="d-flex">
+              <div class="todo-item-checkbox">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="item.done"
+                  (change)="updateItem(item)"
+                />
+              </div>
+              <div class="flex-fill">
+                <input
+                  id="{{ 'itemTitle' + i }}"
+                  *ngIf="item == selectedItem"
+                  type="text"
+                  class="form-control item-input-control"
+                  [(ngModel)]="item.title"
+                  (keyup.enter)="updateItem(item, true)"
+                  (blur)="updateItem(item)"
+                  autofocus="autofocus"
+                />
+                <div
+                  class="todo-item-title"
+                  *ngIf="item != selectedItem"
+                  [ngClass]="{ 'done-todo': item.done }"
+                  (click)="editItem(item, 'itemTitle' + i)"
+                  class="form-control item-input-control"
+                >
+                  <span>{{ item.title }}</span>
+                </div>
+              </div>
+              <div class="todo-item-commands">
+                <button
+                  *ngIf="item.id != 0"
+                  (click)="showItemDetailsModal(itemDetailsModalTemplate, item)"
+                  class="btn btn-default btn-xs"
+                  role="button"
+                >
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        </li>
-        <li class="list-group-item" (click)="addItem()">
-          <button class="btn btn-default">Add Item...</button>
-        </li>
-      </ul>
+          </li>
+          <li class="list-group-item" (click)="addItem()">
+            <button class="btn btn-default">Add Item...</button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Todos with tags -->
+<mat-form-field appearance="fill">
+  <mat-select
+    #selectedValue
+    class="form-control"
+    (selectionChange)="onChange($event)"
+  >
+    <mat-option [value]="tag" *ngFor="let tag of tagList">
+      {{ tag.tagName }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<button
+  type="button"
+  class="btn btn-danger"
+  (click)="selectedValue.value = undefined"
+>
+  Clear Filter
+</button>
+<!-- the end -->
 
 <div *ngIf="debug">
   <pre>{{ lists | json }}</pre>
@@ -193,6 +271,21 @@
             {{ clr.name }}
           </option>
         </select>
+      </div>
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Tags</mat-label>
+          <mat-select
+            class="form-control"
+            formControlName="todoItemTag"
+            [(ngModel)]="selectedTagList"
+            multiple
+          >
+            <mat-option [value]="tag" *ngFor="let tag of tagList">
+              {{ tag.tagName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="form-group">
         <label for="note">Note</label>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo_App.Infrastructure.Persistence;
 
@@ -11,9 +12,10 @@ using Todo_App.Infrastructure.Persistence;
 namespace Todo_App.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130114420_tag_property_changedTo_List")]
+    partial class tag_property_changedTo_List
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -344,6 +346,9 @@ namespace Todo_App.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int?>("TodoItemTagId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ListId");
@@ -374,7 +379,12 @@ namespace Todo_App.Infrastructure.Migrations
                     b.Property<string>("TagName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TodoItemTagId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TodoItemTagId");
 
                     b.ToTable("TodoItemsTags");
                 });
@@ -474,21 +484,6 @@ namespace Todo_App.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("TodoItemTodoItemTag", b =>
-                {
-                    b.Property<int>("TodoItemTagId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TodoItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TodoItemTagId", "TodoItemsId");
-
-                    b.HasIndex("TodoItemsId");
-
-                    b.ToTable("TodoItemTodoItemTag");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -551,6 +546,13 @@ namespace Todo_App.Infrastructure.Migrations
                     b.Navigation("List");
                 });
 
+            modelBuilder.Entity("Todo_App.Domain.Entities.TodoItemTag", b =>
+                {
+                    b.HasOne("Todo_App.Domain.Entities.TodoItem", null)
+                        .WithMany("TodoItemTag")
+                        .HasForeignKey("TodoItemTagId");
+                });
+
             modelBuilder.Entity("Todo_App.Domain.Entities.TodoList", b =>
                 {
                     b.OwnsOne("Todo_App.Domain.ValueObjects.Colour", "Colour", b1 =>
@@ -574,19 +576,9 @@ namespace Todo_App.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TodoItemTodoItemTag", b =>
+            modelBuilder.Entity("Todo_App.Domain.Entities.TodoItem", b =>
                 {
-                    b.HasOne("Todo_App.Domain.Entities.TodoItemTag", null)
-                        .WithMany()
-                        .HasForeignKey("TodoItemTagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Todo_App.Domain.Entities.TodoItem", null)
-                        .WithMany()
-                        .HasForeignKey("TodoItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("TodoItemTag");
                 });
 
             modelBuilder.Entity("Todo_App.Domain.Entities.TodoList", b =>
