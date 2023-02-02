@@ -1,0 +1,29 @@
+<div>
+  <label>New Tag</label>
+  <form>
+    <input
+      class="form-control"
+      type="text"
+      name="tag"
+      [(ngModel)]="tag.tagName"
+    />
+  </form>
+  <button class="btn btn-primary mt-2" (click)="addTag()">Add</button>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Tag Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let tag of tags">
+      <td>{{ tag.tagName }}</td>
+      <td>
+        <button type="button" class="btn btn-danger" (click)="deleteTag(tag)">
+          Delete
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

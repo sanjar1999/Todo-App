@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Todo_App.Domain.Entities;
+using Todo_App.Domain.ValueObjects;
 using Todo_App.Infrastructure.Identity;
 
 namespace Todo_App.Infrastructure.Persistence;
@@ -82,8 +83,33 @@ public class ApplicationDbContextInitialiser
                     new TodoItem { Title = "Check off the first item ✅" },
                     new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
                     new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
+                    new TodoItem { Title = "for color testing",ColourCode = Colour.White.Code },
                 }
             });
+
+            await _context.SaveChangesAsync();
+        }
+        if (!_context.TodoItemsTags.Any())
+        {
+            _context.TodoItemsTags.Add(
+                new TodoItemTag { TagName = "Sport" }
+            ); 
+            
+            _context.TodoItemsTags.Add(
+                new TodoItemTag { TagName = "Work" }
+            );
+
+            _context.TodoItemsTags.Add(
+                new TodoItemTag { TagName = "Family" }
+            );
+
+            _context.TodoItemsTags.Add(
+                new TodoItemTag { TagName = "Friend" }
+            );
+
+            _context.TodoItemsTags.Add(
+                new TodoItemTag { TagName = "Programming" }
+            );
 
             await _context.SaveChangesAsync();
         }

@@ -10,11 +10,15 @@ public class TodoItemDto : IMapFrom<TodoItem>
 
     public int ListId { get; set; }
 
+    public List<TagsDto>? TodoItemTag { get; set; }
+
     public string? Title { get; set; }
 
     public bool Done { get; set; }
 
     public int Priority { get; set; }
+
+    public string? ColourCode { get; set; }
 
     public string? Note { get; set; }
 
