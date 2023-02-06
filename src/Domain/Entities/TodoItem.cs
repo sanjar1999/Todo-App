@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Todo_App.Domain.Entities;
+﻿namespace Todo_App.Domain.Entities;
 
 public class TodoItem : BaseAuditableEntity
 {
@@ -32,4 +30,5 @@ public class TodoItem : BaseAuditableEntity
     public TodoList List { get; set; } = null!;
     public string? ColourCode { get; set; }
     public List<TodoItemTag>? TodoItemTag { get; set; }
+    public bool IsDeleted { get; set; } = false;
 }

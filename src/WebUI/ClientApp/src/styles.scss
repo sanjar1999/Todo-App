@@ -29,3 +29,37 @@ code {
 @import '../node_modules/bootstrap-icons/font/bootstrap-icons';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-form-field-appearance-fill .mat-form-field-flex{
+
+background-color: transparent;
+}
+
+.mat-select{
+  width: 100%;
+}
+
+.filter-box .mat-form-field{
+  width: 450px;
+}
+
+.mat-form-field-underline{
+  display: none;
+  &::before{
+    height: 0;
+    opacity: 0!important;
+  }
+}
+
+.btn-tag {
+  display: flex;
+    justify-content: flex-end;
+}
+
+.mat-form-field-infix{
+  width:100%!important;
+}
+
+.mat-form-field{
+  width:100%;
+}

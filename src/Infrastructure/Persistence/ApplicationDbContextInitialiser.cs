@@ -89,25 +89,14 @@ public class ApplicationDbContextInitialiser
 
             await _context.SaveChangesAsync();
         }
+
         if (!_context.TodoItemsTags.Any())
         {
-            _context.TodoItemsTags.Add(
-                new TodoItemTag { TagName = "Sport" }
-            ); 
-            
-            _context.TodoItemsTags.Add(
-                new TodoItemTag { TagName = "Work" }
-            );
-
-            _context.TodoItemsTags.Add(
-                new TodoItemTag { TagName = "Family" }
-            );
-
-            _context.TodoItemsTags.Add(
-                new TodoItemTag { TagName = "Friend" }
-            );
-
-            _context.TodoItemsTags.Add(
+            _context.TodoItemsTags.AddRange(
+                new TodoItemTag { TagName = "Sport" },
+                new TodoItemTag { TagName = "Work" },
+                new TodoItemTag { TagName = "Family" },
+                new TodoItemTag { TagName = "Friend" },
                 new TodoItemTag { TagName = "Programming" }
             );
 

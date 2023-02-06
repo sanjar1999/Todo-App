@@ -11,8 +11,7 @@ public class TagsController : ApiControllerBase
     [HttpGet("tag")]
     public async Task<ActionResult<List<TagsDto>>> GetTags() 
     {
-        var a = await Mediator.Send(new GetTagsQuery());
-        return a;
+        return await Mediator.Send(new GetTagsQuery());
     }
 
     [HttpPost()]

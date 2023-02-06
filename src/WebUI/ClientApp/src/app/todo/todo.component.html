@@ -1,7 +1,26 @@
 <h1>Todo</h1>
 
 <p>This is a complex todo list component.</p>
-
+<div class="filter-box">
+  <mat-form-field appearance="fill">
+    <mat-select
+      #selectedValue
+      class="form-control filter-select"
+      (selectionChange)="filterTodos($event)"
+    >
+      <mat-option [value]="tag" *ngFor="let tag of tagList">
+        {{ tag.tagName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button
+    type="button"
+    class="btn btn-danger clear-btn"
+    (click)="selectedValue.value = undefined"
+  >
+    Clear Filter
+  </button>
+</div>
 <p *ngIf="!lists"><em>Loading...</em></p>
 
 <div *ngIf="lists">
@@ -47,7 +66,7 @@
           <i class="bi bi-three-dots-vertical"></i>
         </button>
       </div>
-      <!-- displayed Todo items -->
+
       <div *ngIf="selectedValue.value === undefined">
         <ul id="todo-items" class="list-group mb-2">
           <li
@@ -101,7 +120,7 @@
           </li>
         </ul>
       </div>
-      <!-- displayed filtered todo items -->
+
       <div *ngIf="selectedValue.value != undefined">
         <ul id="todo-items" class="list-group mb-2">
           <li
@@ -160,24 +179,7 @@
 </div>
 
 <!-- Todos with tags -->
-<mat-form-field appearance="fill">
-  <mat-select
-    #selectedValue
-    class="form-control"
-    (selectionChange)="onChange($event)"
-  >
-    <mat-option [value]="tag" *ngFor="let tag of tagList">
-      {{ tag.tagName }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<button
-  type="button"
-  class="btn btn-danger"
-  (click)="selectedValue.value = undefined"
->
-  Clear Filter
-</button>
+
 <!-- the end -->
 
 <div *ngIf="debug">
@@ -279,9 +281,10 @@
             class="form-control"
             formControlName="todoItemTag"
             [(ngModel)]="selectedTagList"
+            [compareWith]="compareSelectedTags"
             multiple
           >
-            <mat-option [value]="tag" *ngFor="let tag of tagList">
+            <mat-option *ngFor="let tag of tagList" [value]="tag">
               {{ tag.tagName }}
             </mat-option>
           </mat-select>

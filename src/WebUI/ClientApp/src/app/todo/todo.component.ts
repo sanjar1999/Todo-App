@@ -1,7 +1,6 @@
 import { Component, TemplateRef, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { MatTableDataSource } from '@angular/material/table';
 import {
   TodoListsClient, TodoItemsClient,
   TodoListDto, TodoItemDto, PriorityLevelDto, ColourDto,
@@ -21,12 +20,10 @@ export class TodoComponent implements OnInit {
   deleteCountDownInterval: any;
   lists: TodoListDto[];
   priorityLevels: PriorityLevelDto[];
-
   colours: ColourDto[];
   tagList: TagsDto[];
   selectedTagList: TagsDto[];
   filteredTodo!: TodoItemDto[];
-
   selectedList: TodoListDto;
   selectedItem: TodoItemDto;
   newListEditor: any = {};
@@ -46,7 +43,7 @@ export class TodoComponent implements OnInit {
 
   constructor(
     private listsClient: TodoListsClient,
-    private itemsClient: TodoItemsClient,
+    public itemsClient: TodoItemsClient,
     private modalService: BsModalService,
     private fb: FormBuilder, 
   ) { }
@@ -277,11 +274,13 @@ export class TodoComponent implements OnInit {
     this.deleting = false;
   }
 
-  onChange($event: any){
+  filterTodos($event: any){
     let filteredData = this.selectedList.items.filter((item) => {
-      return item.todoItemTag.some(x => x.id == $event.value.id);
+      return item.todoItemTag?.some(x => x.id == $event.value.id);
     })
-    console.log(filteredData)
-    this.filteredTodo = filteredData
+    console.log(filteredData);
+    this.filteredTodo = filteredData;
   }
+
+  compareSelectedTags = (a: any, b: any) => a.id == b.id;
 }

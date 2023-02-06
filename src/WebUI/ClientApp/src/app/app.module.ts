@@ -49,7 +49,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatSelectModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

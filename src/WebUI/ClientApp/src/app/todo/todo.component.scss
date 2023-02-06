@@ -38,3 +38,21 @@
 }
 
 .mat-form-field-appearance-fill .mat-form-field-flex{background-color:rgba(0,0,0,0)}
+
+.filter-select {
+  width: 80%;
+}
+
+.clear-btn {
+  width: 20%;
+}
+
+.filter-box{
+  display: flex;
+  align-items: center;
+
+  .mat-form-field-appearance-fill{
+    background-color: transparent!important;
+    padding: 0;
+  }
+}

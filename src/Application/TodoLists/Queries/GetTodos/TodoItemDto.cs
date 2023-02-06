@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Todo_App.Application.Common.Mappings;
 using Todo_App.Domain.Entities;
 
@@ -21,6 +22,8 @@ public class TodoItemDto : IMapFrom<TodoItem>
     public string? ColourCode { get; set; }
 
     public string? Note { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
 
     public void Mapping(Profile profile)
     {

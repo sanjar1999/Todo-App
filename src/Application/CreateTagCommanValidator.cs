@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
+using Todo_App.Application.Tags.Commands.CreateTag;
 
-namespace Todo_App.Application.Tags.Commands.CreateTag;
+namespace Todo_App.Application;
 public class CreateTagCommanValidator : AbstractValidator<CreateTagCommand>
 {
     public CreateTagCommanValidator()

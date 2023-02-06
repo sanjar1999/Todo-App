@@ -36,7 +36,7 @@ public class UpdateTodoItemDetailCommandHandler : IRequestHandler<UpdateTodoItem
     {
         var entity = await _context.TodoItems
             .Include(x => x.TodoItemTag)
-            .FirstOrDefaultAsync( x => x.Id == request.Id , cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.Id && x.IsDeleted == false, cancellationToken); ;
 
         if (entity == null)
         {
@@ -44,6 +44,7 @@ public class UpdateTodoItemDetailCommandHandler : IRequestHandler<UpdateTodoItem
         }
 
         var tagIds = request.TodoItemTag?.Select(x => x.Id).ToList();
+
         entity.ListId = request.ListId;
         entity.Priority = request.Priority;
         entity.Note = request.Note;

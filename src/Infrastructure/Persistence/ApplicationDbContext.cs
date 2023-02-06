@@ -37,6 +37,8 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.Entity<TodoItem>().HasQueryFilter(b => b.IsDeleted == false);
+        builder.Entity<TodoList>().HasQueryFilter(x => x.IsDeleted == false);
 
         base.OnModelCreating(builder);
     }

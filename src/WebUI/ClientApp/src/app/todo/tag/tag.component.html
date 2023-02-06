@@ -19,7 +19,7 @@
   <tbody>
     <tr *ngFor="let tag of tags">
       <td>{{ tag.tagName }}</td>
-      <td>
+      <td class="btn-tag">
         <button type="button" class="btn btn-danger" (click)="deleteTag(tag)">
           Delete
         </button>
