@@ -14,7 +14,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
-
+    
     // Initialise and seed database
     using (var scope = app.Services.CreateScope())
     {

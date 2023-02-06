@@ -31,9 +31,14 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
 
+    public DbSet<TodoItemTag> TodoItemsTags => Set<TodoItemTag>();
+
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.Entity<TodoItem>().HasQueryFilter(b => b.IsDeleted == false);
+        builder.Entity<TodoList>().HasQueryFilter(x => x.IsDeleted == false);
 
         base.OnModelCreating(builder);
     }

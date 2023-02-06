@@ -3,10 +3,10 @@ import { FormBuilder } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {
   TodoListsClient, TodoItemsClient,
-  TodoListDto, TodoItemDto, PriorityLevelDto,
+  TodoListDto, TodoItemDto, PriorityLevelDto, ColourDto,
   CreateTodoListCommand, UpdateTodoListCommand,
-  CreateTodoItemCommand, UpdateTodoItemDetailCommand
-} from '../web-api-client';
+  CreateTodoItemCommand, UpdateTodoItemDetailCommand, TagsDto} from '../web-api-client';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-todo-component',
@@ -20,6 +20,10 @@ export class TodoComponent implements OnInit {
   deleteCountDownInterval: any;
   lists: TodoListDto[];
   priorityLevels: PriorityLevelDto[];
+  colours: ColourDto[];
+  tagList: TagsDto[];
+  selectedTagList: TagsDto[];
+  filteredTodo!: TodoItemDto[];
   selectedList: TodoListDto;
   selectedItem: TodoItemDto;
   newListEditor: any = {};
@@ -32,15 +36,16 @@ export class TodoComponent implements OnInit {
     id: [null],
     listId: [null],
     priority: [''],
-    note: ['']
+    colourCode: [''],
+    todoItemTag: [''],
+    note: [''],
   });
-
 
   constructor(
     private listsClient: TodoListsClient,
-    private itemsClient: TodoItemsClient,
+    public itemsClient: TodoItemsClient,
     private modalService: BsModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder, 
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +53,9 @@ export class TodoComponent implements OnInit {
       result => {
         this.lists = result.lists;
         this.priorityLevels = result.priorityLevels;
+        this.colours = result.colours;
+        this.tagList = result.tags;
+
         if (this.lists.length) {
           this.selectedList = this.lists[0];
         }
@@ -138,8 +146,9 @@ export class TodoComponent implements OnInit {
   // Items
   showItemDetailsModal(template: TemplateRef<any>, item: TodoItemDto): void {
     this.selectedItem = item;
+    this.selectedTagList = this.selectedItem.todoItemTag;
     this.itemDetailsFormGroup.patchValue(this.selectedItem);
-
+    
     this.itemDetailsModalRef = this.modalService.show(template);
     this.itemDetailsModalRef.onHidden.subscribe(() => {
         this.stopDeleteCountDown();
@@ -162,7 +171,9 @@ export class TodoComponent implements OnInit {
         }
 
         this.selectedItem.priority = item.priority;
+        this.selectedItem.colourCode = item.colourCode;
         this.selectedItem.note = item.note;
+        this.selectedItem.todoItemTag = item.todoItemTag;
         this.itemDetailsModalRef.hide();
         this.itemDetailsFormGroup.reset();
       },
@@ -175,12 +186,13 @@ export class TodoComponent implements OnInit {
       id: 0,
       listId: this.selectedList.id,
       priority: this.priorityLevels[0].value,
+      colourCode: this.colours[0].value,
       title: '',
       done: false
     } as TodoItemDto;
 
     this.selectedList.items.push(item);
-    const index = this.selectedList.items.length - 1;
+    const index = this.selectedList.items.length - 1;4
     this.editItem(item, 'itemTitle' + index);
   }
 
@@ -261,4 +273,14 @@ export class TodoComponent implements OnInit {
     this.deleteCountDown = 0;
     this.deleting = false;
   }
+
+  filterTodos($event: any){
+    let filteredData = this.selectedList.items.filter((item) => {
+      return item.todoItemTag?.some(x => x.id == $event.value.id);
+    })
+    console.log(filteredData);
+    this.filteredTodo = filteredData;
+  }
+
+  compareSelectedTags = (a: any, b: any) => a.id == b.id;
 }

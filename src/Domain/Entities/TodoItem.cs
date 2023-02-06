@@ -28,4 +28,7 @@ public class TodoItem : BaseAuditableEntity
     }
 
     public TodoList List { get; set; } = null!;
+    public string? ColourCode { get; set; }
+    public List<TodoItemTag>? TodoItemTag { get; set; }
+    public bool IsDeleted { get; set; } = false;
 }
