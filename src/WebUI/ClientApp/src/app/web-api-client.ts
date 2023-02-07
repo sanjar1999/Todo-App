@@ -853,6 +853,7 @@ export class UpdateTodoItemDetailCommand implements IUpdateTodoItemDetailCommand
     id?: number;
     listId?: number;
     priority?: PriorityLevel;
+    colourCode?: string | undefined;
     note?: string | undefined;
 
     constructor(data?: IUpdateTodoItemDetailCommand) {
@@ -869,6 +870,7 @@ export class UpdateTodoItemDetailCommand implements IUpdateTodoItemDetailCommand
             this.id = _data["id"];
             this.listId = _data["listId"];
             this.priority = _data["priority"];
+            this.colourCode = _data["colourCode"];
             this.note = _data["note"];
         }
     }
@@ -885,6 +887,7 @@ export class UpdateTodoItemDetailCommand implements IUpdateTodoItemDetailCommand
         data["id"] = this.id;
         data["listId"] = this.listId;
         data["priority"] = this.priority;
+        data["colourCode"] = this.colourCode;
         data["note"] = this.note;
         return data;
     }
@@ -894,6 +897,7 @@ export interface IUpdateTodoItemDetailCommand {
     id?: number;
     listId?: number;
     priority?: PriorityLevel;
+    colourCode?: string | undefined;
     note?: string | undefined;
 }
 
@@ -907,6 +911,7 @@ export enum PriorityLevel {
 export class TodosVm implements ITodosVm {
     priorityLevels?: PriorityLevelDto[];
     lists?: TodoListDto[];
+    colours?: ColourDto[];
 
     constructor(data?: ITodosVm) {
         if (data) {
@@ -928,6 +933,11 @@ export class TodosVm implements ITodosVm {
                 this.lists = [] as any;
                 for (let item of _data["lists"])
                     this.lists!.push(TodoListDto.fromJS(item));
+            }
+            if (Array.isArray(_data["colours"])) {
+                this.colours = [] as any;
+                for (let item of _data["colours"])
+                    this.colours!.push(ColourDto.fromJS(item));
             }
         }
     }
@@ -951,6 +961,11 @@ export class TodosVm implements ITodosVm {
             for (let item of this.lists)
                 data["lists"].push(item.toJSON());
         }
+        if (Array.isArray(this.colours)) {
+            data["colours"] = [];
+            for (let item of this.colours)
+                data["colours"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -958,6 +973,7 @@ export class TodosVm implements ITodosVm {
 export interface ITodosVm {
     priorityLevels?: PriorityLevelDto[];
     lists?: TodoListDto[];
+    colours?: ColourDto[];
 }
 
 export class PriorityLevelDto implements IPriorityLevelDto {
@@ -1062,6 +1078,7 @@ export class TodoItemDto implements ITodoItemDto {
     title?: string | undefined;
     done?: boolean;
     priority?: number;
+    colourCode?: string | undefined;
     note?: string | undefined;
 
     constructor(data?: ITodoItemDto) {
@@ -1080,6 +1097,7 @@ export class TodoItemDto implements ITodoItemDto {
             this.title = _data["title"];
             this.done = _data["done"];
             this.priority = _data["priority"];
+            this.colourCode = _data["colourCode"];
             this.note = _data["note"];
         }
     }
@@ -1098,6 +1116,7 @@ export class TodoItemDto implements ITodoItemDto {
         data["title"] = this.title;
         data["done"] = this.done;
         data["priority"] = this.priority;
+        data["colourCode"] = this.colourCode;
         data["note"] = this.note;
         return data;
     }
@@ -1109,7 +1128,48 @@ export interface ITodoItemDto {
     title?: string | undefined;
     done?: boolean;
     priority?: number;
+    colourCode?: string | undefined;
     note?: string | undefined;
+}
+
+export class ColourDto implements IColourDto {
+    name?: string | undefined;
+    value?: string;
+
+    constructor(data?: IColourDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): ColourDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColourDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface IColourDto {
+    name?: string | undefined;
+    value?: string;
 }
 
 export class CreateTodoListCommand implements ICreateTodoListCommand {

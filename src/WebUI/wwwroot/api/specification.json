@@ -487,6 +487,10 @@
           "priority": {
             "$ref": "#/components/schemas/PriorityLevel"
           },
+          "colourCode": {
+            "type": "string",
+            "nullable": true
+          },
           "note": {
             "type": "string",
             "nullable": true
@@ -523,6 +527,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TodoListDto"
+            }
+          },
+          "colours": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ColourDto"
             }
           }
         }
@@ -588,9 +598,26 @@
             "type": "integer",
             "format": "int32"
           },
+          "colourCode": {
+            "type": "string",
+            "nullable": true
+          },
           "note": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "ColourDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string"
           }
         }
       },
